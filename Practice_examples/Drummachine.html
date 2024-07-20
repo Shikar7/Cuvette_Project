@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16-Step Drum Machine</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a0505;
+            color: #f8e0e0;
+        }
+        .drum-machine {
+            background-color: #2d0909;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 60px repeat(16, 35px);
+            gap: 5px;
+            align-items: center;
+        }
+        .beat-indicator {
+            grid-column: 2 / span 16;
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            margin-bottom: 5px;
+        }
+        .beat-number {
+            text-align: center;
+            font-size: 12px;
+            color: #ff9999;
+        }
+        .row {
+            display: contents;
+        }
+        .label {
+            color: #f8e0e0;
+            font-weight: bold;
+        }
+        .cell {
+            width: 35px;
+            height: 35px;
+            background-color: #1a0505;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .cell.active {
+            background-color: #c41e3a;
+        }
+        .cell.current {
+            border: 2px solid #ff6b6b;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #c41e3a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #a51a2f;
+        }
+        button:active {
+            background-color: #8b0000;
+        }
+        .tempo-control {
+            display: flex;
+            align-items: center;
+            width: 300px;
+        }
+        #tempoValue {
+            margin-left: 20px;
+            font-weight: bold;
+            width: 80px;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 200px;
+            height: 10px;
+            border-radius: 5px;
+            background: #4d0f0f;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #c41e3a;
+            cursor: pointer;
+            transition: background 0.15s ease-in-out;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border: 0;
+            border-radius: 50%;
+            background: #c41e3a;
+            cursor: pointer;
+            transition: background 0.15s ease-in-out;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #ff4d4d;
+        }
+        input[type="range"]::-moz-range-thumb:hover {
+            background: #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+    <div class="drum-machine">
+        <h1>16-Step Drum Machine</h1>
+        <div class="grid">
+            <div class="beat-indicator">
+                <div class="beat-number">1</div>
+                <div class="beat-number">2</div>
+                <div class="beat-number">3</div>
+                <div class="beat-number">4</div>
+                <div class="beat-number">5</div>
+                <div class="beat-number">6</div>
+                <div class="beat-number">7</div>
+                <div class="beat-number">8</div>
+                <div class="beat-number">9</div>
+                <div class="beat-number">10</div>
+                <div class="beat-number">11</div>
+                <div class="beat-number">12</div>
+                <div class="beat-number">13</div>
+                <div class="beat-number">14</div>
+                <div class="beat-number">15</div>
+                <div class="beat-number">16</div>
+            </div>
+            <div class="row">
+                <div class="label">Hi-hat</div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+                <div class="cell active" data-sound="hihat"></div>
+                <div class="cell" data-sound="hihat"></div>
+            </div>
+            <div class="row">
+                <div class="label">Snare</div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell active" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell active" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+                <div class="cell" data-sound="snare"></div>
+            </div>
+            <div class="row">
+                <div class="label">Kick</div>
+                <div class="cell active" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell active" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell active" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+                <div class="cell" data-sound="kick"></div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="play">Play</button>
+            <button id="stop">Stop</button>
+            <div class="tempo-control">
+                <input type="range" id="tempo" min="60" max="240" value="120">
+                <span id="tempoValue">120 BPM</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // The JavaScript code remains the same as in the previous version
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let isPlaying = false;
+        let currentStep = 0;
+        let intervalId;
+
+        const cells = document.querySelectorAll('.cell');
+        const playButton = document.getElementById('play');
+        const stopButton = document.getElementById('stop');
+        const tempoSlider = document.getElementById('tempo');
+        const tempoValue = document.getElementById('tempoValue');
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('active');
+            });
+        });
+
+        playButton.addEventListener('click', startSequencer);
+        stopButton.addEventListener('click', stopSequencer);
+        tempoSlider.addEventListener('input', updateTempo);
+
+        function startSequencer() {
+            if (isPlaying) return;
+            isPlaying = true;
+            currentStep = 0;
+            audioContext.resume().then(() => {
+                scheduleNextStep();
+            });
+        }
+
+        function stopSequencer() {
+            isPlaying = false;
+            clearTimeout(intervalId);
+            currentStep = 0;
+            cells.forEach(cell => cell.classList.remove('current'));
+        }
+
+        function scheduleNextStep() {
+            const tempo = tempoSlider.value;
+            const secondsPerBeat = 60 / tempo;
+            const secondsPerStep = secondsPerBeat / 4;
+
+            playStep();
+            currentStep = (currentStep + 1) % 16;
+
+            if (isPlaying) {
+                intervalId = setTimeout(scheduleNextStep, secondsPerStep * 1000);
+            }
+        }
+
+        function playStep() {
+            cells.forEach((cell, index) => {
+                cell.classList.toggle('current', index % 16 === currentStep);
+                if (index % 16 === currentStep && cell.classList.contains('active')) {
+                    playSound(cell.dataset.sound);
+                }
+            });
+        }
+
+        function playSound(sound) {
+            const startTime = audioContext.currentTime;
+
+            switch (sound) {
+                case 'hihat':
+                    playHiHat(startTime);
+                    break;
+                case 'snare':
+                    playSnare(startTime);
+                    break;
+                case 'kick':
+                    playKick(startTime);
+                    break;
+            }
+        }
+
+        function playHiHat(startTime) {
+            const fundamental = 400;
+            const ratios = [2, 3, 4.16, 5.43, 6.79, 8.21];
+            
+            const bandpass = audioContext.createBiquadFilter();
+            bandpass.type = 'bandpass';
+            bandpass.frequency.setValueAtTime(10000, startTime);
+
+            const highpass = audioContext.createBiquadFilter();
+            highpass.type = 'highpass';
+            highpass.frequency.setValueAtTime(7000, startTime);
+
+            ratios.forEach(ratio => {
+                const osc = audioContext.createOscillator();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(fundamental * ratio, startTime);
+
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0.3 / ratios.length, startTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.05);
+
+                osc.connect(gainNode);
+                gainNode.connect(bandpass);
+                bandpass.connect(highpass);
+                highpass.connect(audioContext.destination);
+
+                osc.start(startTime);
+                osc.stop(startTime + 0.05);
+            });
+        }
+
+        function playSnare(startTime) {
+            // Noise component
+            const bufferSize = audioContext.sampleRate * 0.1;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const output = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = audioContext.createBufferSource();
+            noise.buffer = buffer;
+
+            const noiseFilter = audioContext.createBiquadFilter();
+            noiseFilter.type = 'highpass';
+            noiseFilter.frequency.setValueAtTime(1000, startTime);
+
+            const noiseEnvelope = audioContext.createGain();
+            noiseEnvelope.gain.setValueAtTime(1, startTime);
+            noiseEnvelope.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseEnvelope);
+            noiseEnvelope.connect(audioContext.destination);
+
+            noise.start(startTime);
+
+            // Tonal component
+            const osc = audioContext.createOscillator();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(180, startTime);
+
+            const tonalEnvelope = audioContext.createGain();
+            tonalEnvelope.gain.setValueAtTime(0.5, startTime);
+            tonalEnvelope.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+
+            osc.connect(tonalEnvelope);
+            tonalEnvelope.connect(audioContext.destination);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.2);
+        }
+
+        function playKick(startTime) {
+            const osc = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            osc.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            osc.frequency.setValueAtTime(150, startTime);
+            osc.frequency.exponentialRampToValueAtTime(0.01, startTime + 0.5);
+
+            gainNode.gain.setValueAtTime(1, startTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.5);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.5);
+        }
+
+        function updateTempo() {
+            tempoValue.textContent = `${tempoSlider.value} BPM`;
+        }
+    </script>
+</body>
+</html>
